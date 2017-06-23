@@ -1,0 +1,15 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "backendDS": {
+    "host": "localhost",
+    "port": 3306,
+    "database": "final_magni",
+    "password": "Lorenzo911",
+    "name": "backendDS",
+    "connector": "mysql",
+    "user": "root"
+  }
+}
