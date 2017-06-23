@@ -13,8 +13,8 @@
     "idusuario": {
       "type": "Number",
       "id": true,
-      "required": false,
       "generated": true,
+      "required": false,
       "length": null,
       "precision": 10,
       "scale": 0,

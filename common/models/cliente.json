@@ -13,8 +13,8 @@
     "idcliente": {
       "type": "Number",
       "id": true,
-      "required": false,
       "generated": true,
+      "required": false,
       "length": null,
       "precision": 10,
       "scale": 0,
@@ -91,7 +91,7 @@
   "validations": [],
   "relations": {
     "domicilio": {
-      "type": "hasOne",
+      "type": "belongsTo",
       "model": "Domicilio",
       "foreignKey": "iddomicilio"
     },
