@@ -73,14 +73,14 @@
       }
     },
     "entregado": {
-      "type": "Binary",
+      "type": "Boolean",
       "required": false,
       "length": null,
       "precision": 1,
       "scale": null,
       "mysql": {
         "columnName": "entregado",
-        "dataType": "bit",
+        "dataType": "tinyint",
         "dataLength": null,
         "dataPrecision": 1,
         "dataScale": null,
