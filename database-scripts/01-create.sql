@@ -18,73 +18,133 @@ USE `final_magni`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping data for table `articulo`
+-- Table structure for table `articulo`
 --
 
-LOCK TABLES `articulo` WRITE;
-/*!40000 ALTER TABLE `articulo` DISABLE KEYS */;
-INSERT INTO `articulo` VALUES (4,5,'Fiat','4432',223,334,NULL);
-/*!40000 ALTER TABLE `articulo` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `articulo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `articulo` (
+  `idArticulo` int(11) NOT NULL AUTO_INCREMENT,
+  `idRubro` int(11) NOT NULL,
+  `denominacion` varchar(100) NOT NULL,
+  `codigo` varchar(20) NOT NULL,
+  `precioCompra` double NOT NULL,
+  `precioVenta` double NOT NULL,
+  `iva` double DEFAULT NULL,
+  PRIMARY KEY (`idArticulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `cliente`
+-- Table structure for table `cliente`
 --
 
-LOCK TABLES `cliente` WRITE;
-/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
-INSERT INTO `cliente` VALUES (5,1,'Preciobajos','444',-55.18);
-/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `cliente`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cliente` (
+  `idCliente` int(11) NOT NULL AUTO_INCREMENT,
+  `idDomicilio` int(11) NOT NULL,
+  `razonSocial` varchar(100) NOT NULL,
+  `cuit` varchar(20) DEFAULT NULL,
+  `saldo` double DEFAULT NULL,
+  PRIMARY KEY (`idCliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `domicilio`
+-- Table structure for table `domicilio`
 --
 
-LOCK TABLES `domicilio` WRITE;
-/*!40000 ALTER TABLE `domicilio` DISABLE KEYS */;
-INSERT INTO `domicilio` VALUES (1,'FFD',2,'Mza',23,23),(27,'EDITAR',5,'4444444',545,4545);
-/*!40000 ALTER TABLE `domicilio` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `domicilio`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `domicilio` (
+  `idDomicilio` int(11) NOT NULL AUTO_INCREMENT,
+  `calle` varchar(100) DEFAULT NULL,
+  `numero` int(11) DEFAULT NULL,
+  `localidad` varchar(100) DEFAULT NULL,
+  `latitud` double DEFAULT NULL,
+  `longitud` double DEFAULT NULL,
+  PRIMARY KEY (`idDomicilio`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pedidoventa`
+-- Table structure for table `pedidoventa`
 --
 
-LOCK TABLES `pedidoventa` WRITE;
-/*!40000 ALTER TABLE `pedidoventa` DISABLE KEYS */;
-INSERT INTO `pedidoventa` VALUES (5,'2018-07-04',55,'enviado',0,'2018-07-06',34,0.18,55.18,5,27);
-/*!40000 ALTER TABLE `pedidoventa` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `pedidoventa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pedidoventa` (
+  `idPedidoVenta` int(11) NOT NULL AUTO_INCREMENT,
+  `fechaEntrega` date DEFAULT NULL,
+  `gastosEnvio` double DEFAULT NULL,
+  `estado` varchar(45) DEFAULT NULL,
+  `entregado` tinyint(4) DEFAULT '0',
+  `fechaPedido` date DEFAULT NULL,
+  `nroPedido` int(11) DEFAULT NULL,
+  `subTotal` double DEFAULT NULL,
+  `montoTotal` double DEFAULT NULL,
+  `idCliente` int(11) NOT NULL,
+  `idDomicilio` int(11) NOT NULL,
+  PRIMARY KEY (`idPedidoVenta`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `pedidoventadetalle`
+-- Table structure for table `pedidoventadetalle`
 --
 
-LOCK TABLES `pedidoventadetalle` WRITE;
-/*!40000 ALTER TABLE `pedidoventadetalle` DISABLE KEYS */;
-INSERT INTO `pedidoventadetalle` VALUES (1,33,44,4,5,4),(2,3,2,3,5,4);
-/*!40000 ALTER TABLE `pedidoventadetalle` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `pedidoventadetalle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pedidoventadetalle` (
+  `idPedidoVentaDetalle` int(11) NOT NULL AUTO_INCREMENT,
+  `cantidad` int(10) NOT NULL,
+  `subTotal` double DEFAULT NULL,
+  `porcentajeDescuento` double DEFAULT NULL,
+  `idPedidoVenta` int(11) NOT NULL,
+  `idArticulo` int(11) NOT NULL,
+  PRIMARY KEY (`idPedidoVentaDetalle`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `rubro`
+-- Table structure for table `rubro`
 --
 
-LOCK TABLES `rubro` WRITE;
-/*!40000 ALTER TABLE `rubro` DISABLE KEYS */;
-INSERT INTO `rubro` VALUES (5,NULL,'543','Automotor');
-/*!40000 ALTER TABLE `rubro` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `rubro`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rubro` (
+  `idRubro` int(11) NOT NULL AUTO_INCREMENT,
+  `idRubroPadre` int(11) DEFAULT NULL,
+  `codigo` varchar(20) DEFAULT NULL,
+  `denominacion` varchar(100) NOT NULL,
+  PRIMARY KEY (`idRubro`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `usuario`
+-- Table structure for table `usuario`
 --
 
-LOCK TABLES `usuario` WRITE;
-/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `usuario`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usuario` (
+  `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  `realm` varchar(45) DEFAULT NULL,
+  `emailVerified` tinyint(4) DEFAULT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -95,4 +155,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-07-03 14:56:08
+-- Dump completed on 2018-07-03 15:18:03
