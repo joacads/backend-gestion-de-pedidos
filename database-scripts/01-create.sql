@@ -1,108 +1,98 @@
+CREATE DATABASE  IF NOT EXISTS `final_magni` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `final_magni`;
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: final_magni
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.1.28-MariaDB
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
-/*!40101 SET SQL_MODE=''*/;
-
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`final_magni` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
-USE `final_magni`;
+--
+-- Dumping data for table `articulo`
+--
 
-DROP TABLE IF EXISTS `rubro`;
-CREATE TABLE `rubro` (
-  `idRubro` int(11) NOT NULL AUTO_INCREMENT,
-  `idRubroPadre` int(11) DEFAULT NULL,
-  `codigo` varchar(20) DEFAULT NULL,
-  `denominacion` varchar(100) NOT NULL,
-  PRIMARY KEY (`idRubro`),
-  CONSTRAINT `rubro_rubro_padre` FOREIGN KEY (`idRubroPadre`) REFERENCES `rubro` (`idRubro`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+LOCK TABLES `articulo` WRITE;
+/*!40000 ALTER TABLE `articulo` DISABLE KEYS */;
+INSERT INTO `articulo` VALUES (4,5,'Fiat','4432',223,334,NULL);
+/*!40000 ALTER TABLE `articulo` ENABLE KEYS */;
+UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `articulo`;
-CREATE TABLE `articulo` (
-  `idArticulo` int(11) NOT NULL AUTO_INCREMENT,
-  `idRubro` int(11) NOT NULL,
-  `denominacion` varchar(100) NOT NULL,
-  `codigo` varchar(20) NOT NULL,
-  `precioCompra` double NOT NULL,
-  `precioVenta` double NOT NULL,
-  `iva` double DEFAULT NULL,
-  PRIMARY KEY (`idArticulo`),
-  KEY `fk_articulo_rubro_idx` (`idRubro`),
-  CONSTRAINT `fk_articulo_rubro` FOREIGN KEY (`idRubro`) REFERENCES `rubro` (`idRubro`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+--
+-- Dumping data for table `cliente`
+--
 
-DROP TABLE IF EXISTS `domicilio`;
-CREATE TABLE `domicilio` (
-  `idDomicilio` int(11) NOT NULL AUTO_INCREMENT,
-  `calle` varchar(100) DEFAULT NULL,
-  `numero` int DEFAULT NULL,
-  `localidad` varchar(100) DEFAULT NULL,
-  `latitud` double DEFAULT NULL,
-  `longitud` double DEFAULT NULL,
-  PRIMARY KEY (`idDomicilio`)
-);
+LOCK TABLES `cliente` WRITE;
+/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT INTO `cliente` VALUES (5,1,'Preciobajos','444',-55.18);
+/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
+UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `cliente`;
-CREATE TABLE `cliente` (
-  `idCliente` int(11) NOT NULL AUTO_INCREMENT,
-  `idDomicilio` int(11) NOT NULL,
-  `razonSocial` varchar(100) NOT NULL,
-  `cuit` varchar(20) DEFAULT NULL,
-  `saldo` double DEFAULT NULL,
-  PRIMARY KEY (`idCliente`),
-  KEY `fk_cliente_domicilio_idx` (`idDomicilio`),
-  CONSTRAINT `fk_cliente_domicilio` FOREIGN KEY (`idDomicilio`) REFERENCES `domicilio` (`idDomicilio`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+--
+-- Dumping data for table `domicilio`
+--
 
-DROP TABLE IF EXISTS `pedidoVenta`;
-CREATE TABLE `pedidoVenta` (
-  `idPedidoVenta` int(11) NOT NULL AUTO_INCREMENT,
-  `fechaEntrega` date DEFAULT NULL,
-  `gastosEnvio` double DEFAULT NULL,
-  `estado` varchar(45) DEFAULT NULL,
-  `entregado` bit(1) DEFAULT b'0',
-  `fechaPedido` date DEFAULT NULL,
-  `nroPedido` int(11) DEFAULT NULL,
-  `subTotal` double DEFAULT NULL,
-  `montoTotal` double DEFAULT NULL,
-  `idCliente` int(11) NOT NULL,
-  `idDomicilio` int(11) NOT NULL,
-  PRIMARY KEY (`idPedidoVenta`),
-  KEY `fk_pedidoVenta_Cliente_idx` (`idCliente`),
-  KEY `fk_pedidoVenta_Domicilio_idx` (`idDomicilio`),
-  CONSTRAINT `fk_pedidoVenta_Cliente` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`idCliente`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pedidoVenta_Domicilio` FOREIGN KEY (`idDomicilio`) REFERENCES `domicilio` (`idDomicilio`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
+LOCK TABLES `domicilio` WRITE;
+/*!40000 ALTER TABLE `domicilio` DISABLE KEYS */;
+INSERT INTO `domicilio` VALUES (1,'FFD',2,'Mza',23,23),(27,'EDITAR',5,'4444444',545,4545);
+/*!40000 ALTER TABLE `domicilio` ENABLE KEYS */;
+UNLOCK TABLES;
 
-DROP TABLE IF EXISTS `pedidoVentaDetalle`;
-CREATE TABLE `pedidoVentaDetalle` (
-  `idPedidoVentaDetalle` int(11) NOT NULL AUTO_INCREMENT,
-  `cantidad` int(10) NOT NULL,
-  `subTotal` double DEFAULT NULL,
-  `porcentajeDescuento` double DEFAULT NULL,
-  `idPedidoVenta` int(11) NOT NULL,
-  `idArticulo` int(11) NOT NULL,
-  PRIMARY KEY (`idPedidoVentaDetalle`),
-  KEY `fk_pedidoVentaDetalle_PedidoVenta_idx` (`idPedidoVenta`),
-  KEY `fk_pedidoVentaDetalle_Articulo_idx` (`idArticulo`),
-  CONSTRAINT `fk_pedidoVentaDetalle_Articulo` FOREIGN KEY (`idArticulo`) REFERENCES `articulo` (`idArticulo`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_pedidoVentaDetalle_PedidoVenta` FOREIGN KEY (`idPedidoVenta`) REFERENCES `pedidoVenta` (`idPedidoVenta`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
+--
+-- Dumping data for table `pedidoventa`
+--
 
-DROP TABLE IF EXISTS `usuario`;
-CREATE TABLE `usuario` (
-  `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  PRIMARY KEY (`idUsuario`)
-);
+LOCK TABLES `pedidoventa` WRITE;
+/*!40000 ALTER TABLE `pedidoventa` DISABLE KEYS */;
+INSERT INTO `pedidoventa` VALUES (5,'2018-07-04',55,'enviado',0,'2018-07-06',34,0.18,55.18,5,27);
+/*!40000 ALTER TABLE `pedidoventa` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Dumping data for table `pedidoventadetalle`
+--
+
+LOCK TABLES `pedidoventadetalle` WRITE;
+/*!40000 ALTER TABLE `pedidoventadetalle` DISABLE KEYS */;
+INSERT INTO `pedidoventadetalle` VALUES (1,33,44,4,5,4),(2,3,2,3,5,4);
+/*!40000 ALTER TABLE `pedidoventadetalle` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `rubro`
+--
+
+LOCK TABLES `rubro` WRITE;
+/*!40000 ALTER TABLE `rubro` DISABLE KEYS */;
+INSERT INTO `rubro` VALUES (5,NULL,'543','Automotor');
+/*!40000 ALTER TABLE `rubro` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `usuario`
+--
+
+LOCK TABLES `usuario` WRITE;
+/*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-07-03 14:56:08
