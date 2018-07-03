@@ -1,53 +1,3 @@
-swagger: '2.0'
-
-info:
-  x-ibm-name: backend
-  version: 1.0.0
-  title: backend
-
-schemes:
-  - https
-host: $(catalog.host)
-basePath: /api
-
-consumes:
-  - application/json
-produces:
-  - application/json
-
-securityDefinitions:
- clientIdHeader:
-   type: apiKey
-   in: header
-   name: X-IBM-Client-Id
- clientSecretHeader:
-   in: "header"
-   name: "X-IBM-Client-Secret"
-   type: "apiKey"
-
-
-security:
- -
-   clientIdHeader: []
-   clientSecretHeader: []
-
-x-ibm-configuration:
-  testable: true
-  enforced: true
-  cors:
-    enabled: true
-  catalogs:
-    apic-dev:
-      properties:
-        runtime-url: $(TARGET_URL)
-    sb:
-      properties:
-        runtime-url: 'http://localhost:4001'
-  assembly:
-    execute:
-      - invoke:
-          target-url: $(runtime-url)$(request.path)$(request.search)
-
 paths:
   '/Users/{id}/accessTokens/{fk}':
     get:
@@ -722,6 +672,29 @@ paths:
         '204':
           description: Request was successful
       deprecated: false
+  '/Articulos/{id}/rubro':
+    get:
+      tags:
+        - Articulo
+      summary: Fetches belongsTo relation rubro.
+      operationId: Articulo.prototype.__get__rubro
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: Articulo id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Rubro'
+      deprecated: false
   /Articulos:
     post:
       tags:
@@ -1082,6 +1055,199 @@ paths:
                 type: number
                 format: double
       deprecated: false
+  '/Clientes/{id}/pedidos/{fk}':
+    get:
+      tags:
+        - Cliente
+      summary: Find a related item by id for pedidos.
+      operationId: Cliente.prototype.__findById__pedidos
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for pedidos
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Pedidoventa'
+      deprecated: false
+    delete:
+      tags:
+        - Cliente
+      summary: Delete a related item by id for pedidos.
+      operationId: Cliente.prototype.__destroyById__pedidos
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for pedidos
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+    put:
+      tags:
+        - Cliente
+      summary: Update a related item by id for pedidos.
+      operationId: Cliente.prototype.__updateById__pedidos
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for pedidos
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Pedidoventa'
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Pedidoventa'
+      deprecated: false
+  '/Clientes/{id}/domicilio':
+    get:
+      tags:
+        - Cliente
+      summary: Fetches belongsTo relation domicilio.
+      operationId: Cliente.prototype.__get__domicilio
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Domicilio'
+      deprecated: false
+  '/Clientes/{id}/pedidos':
+    get:
+      tags:
+        - Cliente
+      summary: Queries pedidos of Cliente.
+      operationId: Cliente.prototype.__get__pedidos
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pedidoventa'
+      deprecated: false
+    post:
+      tags:
+        - Cliente
+      summary: Creates a new instance in pedidos of this model.
+      operationId: Cliente.prototype.__create__pedidos
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Pedidoventa'
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Pedidoventa'
+      deprecated: false
+    delete:
+      tags:
+        - Cliente
+      summary: Deletes all pedidos of this model.
+      operationId: Cliente.prototype.__delete__pedidos
+      parameters:
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  '/Clientes/{id}/pedidos/count':
+    get:
+      tags:
+        - Cliente
+      summary: Counts pedidos of Cliente.
+      operationId: Cliente.prototype.__count__pedidos
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Cliente id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
   /Clientes:
     post:
       tags:
@@ -1430,6 +1596,222 @@ paths:
           in: query
           description: Criteria to match model instances
           required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
+  '/Pedidoventa/{id}/cliente':
+    get:
+      tags:
+        - Pedidoventa
+      summary: Fetches belongsTo relation cliente.
+      operationId: Pedidoventa.prototype.__get__cliente
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Cliente'
+      deprecated: false
+  '/Pedidoventa/{id}/domicilio':
+    get:
+      tags:
+        - Pedidoventa
+      summary: Fetches belongsTo relation domicilio.
+      operationId: Pedidoventa.prototype.__get__domicilio
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Domicilio'
+      deprecated: false
+  '/Pedidoventa/{id}/detalles/{fk}':
+    get:
+      tags:
+        - Pedidoventa
+      summary: Find a related item by id for detalles.
+      operationId: Pedidoventa.prototype.__findById__detalles
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for detalles
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Pedidoventadetalle'
+      deprecated: false
+    delete:
+      tags:
+        - Pedidoventa
+      summary: Delete a related item by id for detalles.
+      operationId: Pedidoventa.prototype.__destroyById__detalles
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for detalles
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+    put:
+      tags:
+        - Pedidoventa
+      summary: Update a related item by id for detalles.
+      operationId: Pedidoventa.prototype.__updateById__detalles
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for detalles
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Pedidoventadetalle'
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Pedidoventadetalle'
+      deprecated: false
+  '/Pedidoventa/{id}/detalles':
+    get:
+      tags:
+        - Pedidoventa
+      summary: Queries detalles of Pedidoventa.
+      operationId: Pedidoventa.prototype.__get__detalles
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Pedidoventadetalle'
+      deprecated: false
+    post:
+      tags:
+        - Pedidoventa
+      summary: Creates a new instance in detalles of this model.
+      operationId: Pedidoventa.prototype.__create__detalles
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Pedidoventadetalle'
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Pedidoventadetalle'
+      deprecated: false
+    delete:
+      tags:
+        - Pedidoventa
+      summary: Deletes all detalles of this model.
+      operationId: Pedidoventa.prototype.__delete__detalles
+      parameters:
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  '/Pedidoventa/{id}/detalles/count':
+    get:
+      tags:
+        - Pedidoventa
+      summary: Counts detalles of Pedidoventa.
+      operationId: Pedidoventa.prototype.__count__detalles
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Pedidoventa id
+          required: true
           type: string
           format: JSON
       responses:
@@ -2162,6 +2544,29 @@ paths:
                 type: number
                 format: double
       deprecated: false
+  '/Pedidoventadetalles/{id}/articulo':
+    get:
+      tags:
+        - Pedidoventadetalle
+      summary: Fetches belongsTo relation articulo.
+      operationId: Pedidoventadetalle.prototype.__get__articulo
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: Pedidoventadetalle id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Articulo'
+      deprecated: false
   /Pedidoventadetalles:
     post:
       tags:
@@ -2510,6 +2915,369 @@ paths:
           in: query
           description: Criteria to match model instances
           required: false
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
+  '/Rubros/{id}/articulos/{fk}':
+    get:
+      tags:
+        - Rubro
+      summary: Find a related item by id for articulos.
+      operationId: Rubro.prototype.__findById__articulos
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for articulos
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Articulo'
+      deprecated: false
+    delete:
+      tags:
+        - Rubro
+      summary: Delete a related item by id for articulos.
+      operationId: Rubro.prototype.__destroyById__articulos
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for articulos
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+    put:
+      tags:
+        - Rubro
+      summary: Update a related item by id for articulos.
+      operationId: Rubro.prototype.__updateById__articulos
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for articulos
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Articulo'
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Articulo'
+      deprecated: false
+  '/Rubros/{id}/rubros/{fk}':
+    get:
+      tags:
+        - Rubro
+      summary: Find a related item by id for rubros.
+      operationId: Rubro.prototype.__findById__rubros
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for rubros
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Rubro'
+      deprecated: false
+    delete:
+      tags:
+        - Rubro
+      summary: Delete a related item by id for rubros.
+      operationId: Rubro.prototype.__destroyById__rubros
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for rubros
+          required: true
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+    put:
+      tags:
+        - Rubro
+      summary: Update a related item by id for rubros.
+      operationId: Rubro.prototype.__updateById__rubros
+      parameters:
+        - name: fk
+          in: path
+          description: Foreign key for rubros
+          required: true
+          type: string
+          format: JSON
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Rubro'
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Rubro'
+      deprecated: false
+  '/Rubros/{id}/rubro':
+    get:
+      tags:
+        - Rubro
+      summary: Fetches belongsTo relation rubro.
+      operationId: Rubro.prototype.__get__rubro
+      parameters:
+        - name: refresh
+          in: query
+          required: false
+          type: boolean
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Rubro'
+      deprecated: false
+  '/Rubros/{id}/articulos':
+    get:
+      tags:
+        - Rubro
+      summary: Queries articulos of Rubro.
+      operationId: Rubro.prototype.__get__articulos
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Articulo'
+      deprecated: false
+    post:
+      tags:
+        - Rubro
+      summary: Creates a new instance in articulos of this model.
+      operationId: Rubro.prototype.__create__articulos
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Articulo'
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Articulo'
+      deprecated: false
+    delete:
+      tags:
+        - Rubro
+      summary: Deletes all articulos of this model.
+      operationId: Rubro.prototype.__delete__articulos
+      parameters:
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  '/Rubros/{id}/articulos/count':
+    get:
+      tags:
+        - Rubro
+      summary: Counts articulos of Rubro.
+      operationId: Rubro.prototype.__count__articulos
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+                format: double
+      deprecated: false
+  '/Rubros/{id}/rubros':
+    get:
+      tags:
+        - Rubro
+      summary: Queries rubros of Rubro.
+      operationId: Rubro.prototype.__get__rubros
+      parameters:
+        - name: filter
+          in: query
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Rubro'
+      deprecated: false
+    post:
+      tags:
+        - Rubro
+      summary: Creates a new instance in rubros of this model.
+      operationId: Rubro.prototype.__create__rubros
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Rubro'
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '200':
+          description: Request was successful
+          schema:
+            $ref: '#/definitions/Rubro'
+      deprecated: false
+    delete:
+      tags:
+        - Rubro
+      summary: Deletes all rubros of this model.
+      operationId: Rubro.prototype.__delete__rubros
+      parameters:
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
+          type: string
+          format: JSON
+      responses:
+        '204':
+          description: Request was successful
+      deprecated: false
+  '/Rubros/{id}/rubros/count':
+    get:
+      tags:
+        - Rubro
+      summary: Counts rubros of Rubro.
+      operationId: Rubro.prototype.__count__rubros
+      parameters:
+        - name: where
+          in: query
+          description: Criteria to match model instances
+          required: false
+          type: string
+          format: JSON
+        - name: id
+          in: path
+          description: Rubro id
+          required: true
           type: string
           format: JSON
       responses:
@@ -3242,8 +4010,6 @@ paths:
                 type: number
                 format: double
       deprecated: false
-
-
 definitions:
   x-any:
     properties: {}
@@ -3286,6 +4052,23 @@ definitions:
     required:
       - email
     additionalProperties: false
+  Rubro:
+    properties:
+      idrubro:
+        type: number
+        format: double
+      idrubropadre:
+        type: number
+        format: double
+      codigo:
+        maxLength: 20
+        type: string
+      denominacion:
+        maxLength: 100
+        type: string
+    required:
+      - denominacion
+    additionalProperties: false
   Articulo:
     properties:
       idarticulo:
@@ -3310,34 +4093,11 @@ definitions:
         type: number
         format: double
     required:
-      - idarticulo
       - idrubro
       - denominacion
       - codigo
       - preciocompra
       - precioventa
-    additionalProperties: false
-  Cliente:
-    properties:
-      idcliente:
-        type: number
-        format: double
-      iddomicilio:
-        type: number
-        format: double
-      razonsocial:
-        maxLength: 100
-        type: string
-      cuit:
-        maxLength: 20
-        type: string
-      saldo:
-        type: number
-        format: double
-    required:
-      - idcliente
-      - iddomicilio
-      - razonsocial
     additionalProperties: false
   Pedidoventa:
     properties:
@@ -3354,7 +4114,7 @@ definitions:
         maxLength: 45
         type: string
       entregado:
-        $ref: '#/definitions/Binary'
+        type: boolean
       fechapedido:
         type: string
         format: date-time
@@ -3374,7 +4134,6 @@ definitions:
         type: number
         format: double
     required:
-      - idpedidoventa
       - idcliente
       - iddomicilio
     additionalProperties: false
@@ -3398,8 +4157,27 @@ definitions:
       longitud:
         type: number
         format: double
+    additionalProperties: false
+  Cliente:
+    properties:
+      idcliente:
+        type: number
+        format: double
+      iddomicilio:
+        type: number
+        format: double
+      razonsocial:
+        maxLength: 100
+        type: string
+      cuit:
+        maxLength: 20
+        type: string
+      saldo:
+        type: number
+        format: double
     required:
       - iddomicilio
+      - razonsocial
     additionalProperties: false
   Pedidoventadetalle:
     properties:
@@ -3422,28 +4200,9 @@ definitions:
         type: number
         format: double
     required:
-      - idpedidoventadetalle
       - cantidad
       - idpedidoventa
       - idarticulo
-    additionalProperties: false
-  Rubro:
-    properties:
-      idrubro:
-        type: number
-        format: double
-      idrubropadre:
-        type: number
-        format: double
-      codigo:
-        maxLength: 20
-        type: string
-      denominacion:
-        maxLength: 100
-        type: string
-    required:
-      - idrubro
-      - denominacion
     additionalProperties: false
   Usuario:
     properties:
@@ -3456,9 +4215,58 @@ definitions:
       password:
         maxLength: 45
         type: string
+      realm:
+        maxLength: 45
+        type: string
+      emailVerified:
+        type: number
+        format: double
+      email:
+        maxLength: 45
+        type: string
     required:
       - idusuario
       - username
       - password
     additionalProperties: false
-
+basePath: /api
+swagger: '2.0'
+info:
+  x-ibm-name: backend
+  version: 1.0.0
+  title: backend
+schemes:
+  - https
+host: $(catalog.host)
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+  clientSecretHeader:
+    in: header
+    name: X-IBM-Client-Secret
+    type: apiKey
+security:
+  - clientIdHeader: []
+    clientSecretHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  catalogs:
+    apic-dev:
+      properties:
+        runtime-url: $(TARGET_URL)
+    sb:
+      properties:
+        runtime-url: 'http://localhost:4001'
+  assembly:
+    execute:
+      - invoke:
+          target-url: $(runtime-url)$(request.path)$(request.search)
